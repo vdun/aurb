@@ -1,0 +1,55 @@
+name: Build AUR hello PKGBUILD
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build:
+    name: Build on Arch Linux
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize pacman and install tooling
+        shell: bash
+        run: |
+          set -euxo pipefail
+          sed -i 's/^#ParallelDownloads.*/ParallelDownloads = 5/' /etc/pacman.conf
+          pacman -Syu --noconfirm --needed base-devel git sudo fakeroot binutils gnupg ca-certificates curl
+          pacman-key --init
+          pacman-key --populate archlinux
+          update-ca-trust
+
+      - name: Create non-root build user
+        shell: bash
+        run: |
+          set -euxo pipefail
+          useradd -m builder
+          echo 'builder ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/builder
+          chown -R builder:builder "$GITHUB_WORKSPACE"
+
+      - name: Clone AUR package (hello)
+        shell: bash
+        run: |
+          set -euxo pipefail
+          sudo -u builder bash -lc 'cd ~ && git clone https://aur.archlinux.org/hello.git aur-hello'
+
+      - name: Build PKGBUILD
+        shell: bash
+        run: |
+          set -euxo pipefail
+          sudo -u builder bash -lc 'cd ~/aur-hello && makepkg -s --noconfirm --needed --skippgpcheck'
+
+      - name: Upload built packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: aur-hello-packages
+          path: /home/builder/aur-hello/*.pkg.tar.*
+
+
