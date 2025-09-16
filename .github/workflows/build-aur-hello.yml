@@ -67,8 +67,8 @@ jobs:
           set -euxo pipefail
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          cd "$GITHUB_WORKSPACE/_bin/"
-          git add .
+          cd "$GITHUB_WORKSPACE"
+          git add _bin/*
           if git diff --cached --quiet; then
             echo "No changes to commit."
             exit 0
