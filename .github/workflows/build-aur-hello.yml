@@ -45,11 +45,17 @@ jobs:
         run: |
           set -euxo pipefail
           sudo -u builder bash -lc 'cd ~/aur-hello && makepkg -s --noconfirm --needed --skippgpcheck'
+      
+      - name: Copy packages to _bin folder in workspace
+        shell: bash
+        run: |
+          set -euxo pipefail
+          sudo -u builder bash -lc 'mkdir -p "$GITHUB_WORKSPACE/_bin" && cp -v ~/aur-hello/*.pkg.tar.* "$GITHUB_WORKSPACE/_bin/"'
 
       - name: Upload built packages
         uses: actions/upload-artifact@v4
         with:
           name: aur-hello-packages
-          path: /home/builder/aur-hello/*.pkg.tar.*
+          path: _bin/*.pkg.tar.*
 
 
