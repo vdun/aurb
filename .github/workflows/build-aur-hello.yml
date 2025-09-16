@@ -50,7 +50,7 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
-          sudo -u builder bash -lc 'mkdir -p "$GITHUB_WORKSPACE/_bin" && cp -v ~/aur-hello/*.pkg.tar.* "$GITHUB_WORKSPACE/_bin/"'
+          sudo -u builder bash -lc 'cp -v ~/aur-hello/*.pkg.tar.* "$GITHUB_WORKSPACE/_bin/"'
 
       - name: Upload built packages
         uses: actions/upload-artifact@v4
