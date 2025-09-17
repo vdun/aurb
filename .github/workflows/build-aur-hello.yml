@@ -53,8 +53,8 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
-          # sudo --preserve-env=GITHUB_WORKSPACE -u builder bash -lc 'mkdir -p "$GITHUB_WORKSPACE/_bin" && cp -v ~/aur-hello/*.pkg.tar.* "$GITHUB_WORKSPACE/_bin/"'
-          sudo --preserve-env=GITHUB_WORKSPACE -u builder bash -lc 'mkdir -p "${{ github.workspace }}/_bin" && cp -v ~/aur-hello/*.pkg.tar.* "${{ github.workspace }}/_bin/"'
+          sudo --preserve-env=GITHUB_WORKSPACE -u builder bash -lc 'mkdir -p "$GITHUB_WORKSPACE/_bin" && cp -v ~/aur-hello/*.pkg.tar.* "$GITHUB_WORKSPACE/_bin/"'
+          # sudo --preserve-env=GITHUB_WORKSPACE -u builder bash -lc 'mkdir -p "${{ github.workspace }}/_bin" && cp -v ~/aur-hello/*.pkg.tar.* "${{ github.workspace }}/_bin/"'
 
       - name: Upload built packages
         uses: actions/upload-artifact@v4
@@ -78,5 +78,3 @@ jobs:
           fi
           git commit -m "Add built AUR hello package artifacts"
           git push
-
-
