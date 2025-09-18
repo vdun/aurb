@@ -33,15 +33,21 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: aurci2
-    - name: Upload Files to Release
-      uses: softprops/action-gh-release@v2
+    - name: Upload Files to Release (gh)
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: aurci2
-        name: aurci build ${{ github.run_number }} from ${{ steps.date.outputs.date }}
-        body: aurci build ${{ github.run_number }} from ${{ steps.date.outputs.date }}
-        files: |
-          ${{ github.workspace }}/*
-        draft: false
-        prerelease: false
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        set -euxo pipefail
+        tag="aurci2"
+        release_name="aurci build ${{ github.run_number }} from ${{ steps.date.outputs.date }}"
+        body="$release_name"
+
+        if gh release view "$tag" >/dev/null 2>&1; then
+          echo "Release $tag exists; will upload assets"
+        else
+          gh release create "$tag" \
+            --title "$release_name" \
+            --notes "$body"
+        fi
+
+        gh release upload "$tag" "${{ github.workspace }}/*" --clobber
