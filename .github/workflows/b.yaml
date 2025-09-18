@@ -1,4 +1,4 @@
-name: Make Repository
+name: b
 
 on:
   workflow_dispatch:
@@ -31,7 +31,7 @@ jobs:
       with:
         tag_name: aurci2
     - name: Upload Files to Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
