@@ -26,6 +26,8 @@ jobs:
         packages: >
           hello
           goose-desktop
+        missing_pacman_dependencies: >
+          protobuf
 
     - name: List generated Files
       run: ls -1 > ${{ github.workspace }}/files.txt
