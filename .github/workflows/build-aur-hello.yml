@@ -23,12 +23,12 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
+          sed -i 's/^#ParallelDownloads.*/ParallelDownloads = 5/' /etc/pacman.conf
+          pacman -Syu --noconfirm --needed base-devel git sudo fakeroot binutils gnupg ca-certificates curl
+          pacman-key --init
+          pacman-key --populate archlinux
+          update-ca-trust
           git log
-          # sed -i 's/^#ParallelDownloads.*/ParallelDownloads = 5/' /etc/pacman.conf
-          # pacman -Syu --noconfirm --needed base-devel git sudo fakeroot binutils gnupg ca-certificates curl
-          # pacman-key --init
-          # pacman-key --populate archlinux
-          # update-ca-trust
 
       # - name: Create non-root build user
       #   shell: bash
