@@ -23,58 +23,59 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
-          sed -i 's/^#ParallelDownloads.*/ParallelDownloads = 5/' /etc/pacman.conf
-          pacman -Syu --noconfirm --needed base-devel git sudo fakeroot binutils gnupg ca-certificates curl
-          pacman-key --init
-          pacman-key --populate archlinux
-          update-ca-trust
+          git log
+          # sed -i 's/^#ParallelDownloads.*/ParallelDownloads = 5/' /etc/pacman.conf
+          # pacman -Syu --noconfirm --needed base-devel git sudo fakeroot binutils gnupg ca-certificates curl
+          # pacman-key --init
+          # pacman-key --populate archlinux
+          # update-ca-trust
 
-      - name: Create non-root build user
-        shell: bash
-        run: |
-          set -euxo pipefail
-          useradd -m builder
-          echo 'builder ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/builder
-          chown -R builder:builder "$GITHUB_WORKSPACE"
+      # - name: Create non-root build user
+      #   shell: bash
+      #   run: |
+      #     set -euxo pipefail
+      #     useradd -m builder
+      #     echo 'builder ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/builder
+      #     chown -R builder:builder "$GITHUB_WORKSPACE"
 
-      - name: Clone AUR package (hello)
-        shell: bash
-        run: |
-          set -euxo pipefail
-          sudo -u builder bash -lc 'cd ~ && git clone https://aur.archlinux.org/hello.git aur-hello'
+      # - name: Clone AUR package (hello)
+      #   shell: bash
+      #   run: |
+      #     set -euxo pipefail
+      #     sudo -u builder bash -lc 'cd ~ && git clone https://aur.archlinux.org/hello.git aur-hello'
 
-      - name: Build PKGBUILD
-        shell: bash
-        run: |
-          set -euxo pipefail
-          sudo -u builder bash -lc 'cd ~/aur-hello && makepkg -s --noconfirm --needed --skippgpcheck'
+      # - name: Build PKGBUILD
+      #   shell: bash
+      #   run: |
+      #     set -euxo pipefail
+      #     sudo -u builder bash -lc 'cd ~/aur-hello && makepkg -s --noconfirm --needed --skippgpcheck'
       
-      - name: Copy packages to _bin folder in workspace
-        shell: bash
-        run: |
-          set -euxo pipefail
-          sudo --preserve-env=GITHUB_WORKSPACE -u builder bash -lc 'mkdir -p "$GITHUB_WORKSPACE/_bin" && cp -v ~/aur-hello/*.pkg.tar.* "$GITHUB_WORKSPACE/_bin/"'
-          # sudo --preserve-env=GITHUB_WORKSPACE -u builder bash -lc 'mkdir -p "${{ github.workspace }}/_bin" && cp -v ~/aur-hello/*.pkg.tar.* "${{ github.workspace }}/_bin/"'
+      # - name: Copy packages to _bin folder in workspace
+      #   shell: bash
+      #   run: |
+      #     set -euxo pipefail
+      #     sudo --preserve-env=GITHUB_WORKSPACE -u builder bash -lc 'mkdir -p "$GITHUB_WORKSPACE/_bin" && cp -v ~/aur-hello/*.pkg.tar.* "$GITHUB_WORKSPACE/_bin/"'
+      #     # sudo --preserve-env=GITHUB_WORKSPACE -u builder bash -lc 'mkdir -p "${{ github.workspace }}/_bin" && cp -v ~/aur-hello/*.pkg.tar.* "${{ github.workspace }}/_bin/"'
 
-      - name: Upload built packages
-        uses: actions/upload-artifact@v4
-        with:
-          name: aur-hello-packages
-          path: _bin/*.pkg.tar.*
+      # - name: Upload built packages
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: aur-hello-packages
+      #     path: _bin/*.pkg.tar.*
 
-      - name: Commit and push _bin artifacts back to repository
-        shell: bash
-        run: |
-          set -euxo pipefail
-          # env
-          # pwd
-          # find
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          if git diff --cached --quiet; then
-            echo "No changes to commit."
-            exit 0
-          fi
-          git commit -m "Add built AUR hello package artifacts"
-          git push
+      # - name: Commit and push _bin artifacts back to repository
+      #   shell: bash
+      #   run: |
+      #     set -euxo pipefail
+      #     # env
+      #     # pwd
+      #     # find
+      #     git config --global user.name "github-actions[bot]"
+      #     git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      #     git add .
+      #     if git diff --cached --quiet; then
+      #       echo "No changes to commit."
+      #       exit 0
+      #     fi
+      #     git commit -m "Add built AUR hello package artifacts"
+      #     git push
