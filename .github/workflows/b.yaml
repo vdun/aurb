@@ -1,10 +1,10 @@
 name: Make Repository
 
 on:
+  workflow_dispatch:
   push:
-    branches:
-      - master
-      - debug
+    branches: [ main ]
+  pull_request:
   schedule:
     - cron: "21 4 * * 0"
 
