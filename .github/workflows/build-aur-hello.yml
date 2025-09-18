@@ -18,7 +18,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        shell: bash
         run: |
           git log
 
