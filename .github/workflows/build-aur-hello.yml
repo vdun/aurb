@@ -16,11 +16,9 @@ jobs:
     container:
       image: archlinux:latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
       - name: Initialize pacman and install tooling
         shell: bash
+        working-directory: ${{ github.workspace }}
         run: |
           set -euxo pipefail
           sed -i 's/^#ParallelDownloads.*/ParallelDownloads = 5/' /etc/pacman.conf
@@ -28,7 +26,16 @@ jobs:
           pacman-key --init
           pacman-key --populate archlinux
           update-ca-trust
-          git log
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Show git log
+        shell: bash
+        working-directory: ${{ github.workspace }}
+        run: |
+          set -euxo pipefail
+          git log --oneline -n 5 || { echo "No git history available"; exit 1; }
 
       # - name: Create non-root build user
       #   shell: bash
