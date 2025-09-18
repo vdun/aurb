@@ -25,6 +25,7 @@ jobs:
       with:
         packages: >
           hello
+          goose-desktop
 
     - name: List generated Files
       run: ls -1 > ${{ github.workspace }}/files.txt
