@@ -25,7 +25,8 @@ jobs:
       with:
         packages: >
           hello
-          goose-desktop
+          pacman-static
+          # goose-desktop
         missing_pacman_dependencies: >
           protobuf
 
