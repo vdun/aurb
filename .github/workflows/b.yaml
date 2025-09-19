@@ -24,11 +24,9 @@ jobs:
       uses: vdun/build-aur-packages@master
       with:
         packages: >
-          hello
           pacman-static
-          # goose-desktop
-        missing_pacman_dependencies: >
-          protobuf
+        # missing_pacman_dependencies: >
+          # hello
 
     - name: List generated Files
       run: ls -1 > ${{ github.workspace }}/files.txt
