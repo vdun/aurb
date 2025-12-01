@@ -25,6 +25,7 @@ jobs:
       with:
         packages: >
           pacman-static
+          nuclei
         # missing_pacman_dependencies: >
           # hello
 
