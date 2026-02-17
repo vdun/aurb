@@ -28,6 +28,7 @@ jobs:
       with:
         packages: >
           dsnote
+          pacman-static
         # missing_pacman_dependencies: >
           # hello
 
