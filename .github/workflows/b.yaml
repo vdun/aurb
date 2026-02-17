@@ -27,8 +27,6 @@ jobs:
       uses: vdun/build-aur-packages@master
       with:
         packages: >
-          # pacman-static
-          # nuclei
           dsnote
         # missing_pacman_dependencies: >
           # hello
