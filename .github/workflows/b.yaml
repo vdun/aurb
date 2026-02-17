@@ -40,7 +40,8 @@ jobs:
       with:
         tag_name: aurci2
     - name: Upload Files to Release
-      uses: softprops/action-gh-release@v2
+      # uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
