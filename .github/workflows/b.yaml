@@ -27,7 +27,6 @@ jobs:
       uses: vdun/build-aur-packages@master
       with:
         packages: >
-          pacman-static
           mcp-cli-git
           dsnote
         # missing_pacman_dependencies: >
