@@ -28,6 +28,7 @@ jobs:
       with:
         packages: >
           mcp-cli-git
+          dsnote
         # missing_pacman_dependencies: >
           # hello
 
